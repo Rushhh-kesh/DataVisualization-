@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Visualizer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Data Visualizer</h1>
+            <p>Upload your Excel or CSV file and visualize your data</p>
+        </header>
+
+        <section id="upload-section">
+            <div class="upload-container">
+                <div class="file-upload-wrapper">
+                    <label for="file-upload" id="file-upload-label">
+                        <span id="file-name">Choose a file</span>
+                        <span class="upload-icon">📁</span>
+                    </label>
+                    <input type="file" id="file-upload" accept=".xlsx, .csv" />
+                </div>
+                <button id="upload-btn" disabled>Upload</button>
+            </div>
+            <div id="upload-status"></div>
+        </section>
+
+        <section id="data-section" class="hidden">
+            <div class="data-wrapper">
+                <div class="columns-info">
+                    <h2>Columns</h2>
+                    <div id="columns-list"></div>
+                </div>
+                <div class="chart-options">
+                    <h2>Create Visualization</h2>
+                    <div class="option-group">
+                        <label for="chart-type">Chart Type:</label>
+                        <select id="chart-type">
+                            <option value="bar">Bar Chart</option>
+                            <option value="pie">Pie Chart</option>
+                            <option value="line">Line Chart</option>
+                        </select>
+                    </div>
+                    <div class="option-group" id="x-axis-group">
+                        <label for="x-axis">X-Axis:</label>
+                        <select id="x-axis"></select>
+                    </div>
+                    <div class="option-group" id="y-axis-group">
+                        <label for="y-axis">Y-Axis:</label>
+                        <select id="y-axis"></select>
+                    </div>
+                    <div class="option-group hidden" id="label-group">
+                        <label for="label-column">Label:</label>
+                        <select id="label-column"></select>
+                    </div>
+                    <div class="option-group hidden" id="value-group">
+                        <label for="value-column">Value:</label>
+                        <select id="value-column"></select>
+                    </div>
+                    <div class="option-group">
+                        <button id="generate-chart">Generate Chart</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="chart-section" class="hidden">
+            <h2>Visualization</h2>
+            <div class="chart-container">
+                <canvas id="chart-canvas"></canvas>
+            </div>
+        </section>
+
+        <footer>
+            <p>Data Visualizer App &copy; 2025</p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

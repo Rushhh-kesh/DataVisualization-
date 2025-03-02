@@ -1,0 +1,307 @@
+/* Base Styles */
+:root {
+    --primary-bg: #fffbf5;
+    --secondary-bg: #fff8ee;
+    --accent-color: #ff9933;
+    --accent-light: #ffbb66;
+    --text-color: #333333;
+    --border-color: #e6e0d4;
+    --shadow-color: rgba(0, 0, 0, 0.05);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--primary-bg);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+/* Header Styles */
+header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+header h1 {
+    font-size: 2.5rem;
+    color: var(--accent-color);
+    margin-bottom: 0.5rem;
+}
+
+header p {
+    font-size: 1.2rem;
+    color: var(--text-color);
+    opacity: 0.8;
+}
+
+/* Section Styles */
+section {
+    background-color: var(--secondary-bg);
+    border-radius: 12px;
+    box-shadow: 0 8px 16px var(--shadow-color);
+    padding: 2rem;
+    margin-bottom: 2rem;
+    transition: all 0.3s ease;
+}
+
+h2 {
+    color: var(--accent-color);
+    margin-bottom: 1.5rem;
+    font-size: 1.8rem;
+}
+
+/* Upload Section */
+.upload-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+.file-upload-wrapper {
+    position: relative;
+    flex-grow: 1;
+    max-width: 500px;
+}
+
+#file-upload {
+    opacity: 0;
+    position: absolute;
+    z-index: -1;
+    width: 0.1px;
+    height: 0.1px;
+}
+
+#file-upload-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    background-color: var(--primary-bg);
+    border: 2px dashed var(--accent-color);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+#file-upload-label:hover {
+    background-color: var(--accent-light);
+    color: white;
+}
+
+.upload-icon {
+    font-size: 1.5rem;
+}
+
+#upload-btn {
+    padding: 1rem 1.5rem;
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+#upload-btn:hover:not([disabled]) {
+    background-color: var(--accent-light);
+    transform: translateY(-2px);
+}
+
+#upload-btn:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+#upload-status {
+    margin-top: 1rem;
+    text-align: center;
+    min-height: 1.5rem;
+}
+
+/* Data Section */
+.data-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+}
+
+.columns-info {
+    padding-right: 1rem;
+    border-right: 1px solid var(--border-color);
+}
+
+#columns-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 1rem;
+}
+
+.column-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.8rem;
+    background-color: var(--primary-bg);
+    border-radius: 6px;
+    box-shadow: 0 2px 4px var(--shadow-color);
+}
+
+.column-type {
+    display: inline-block;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.type-T {
+    background-color: #9eebcf;
+    color: #00593e;
+}
+
+.type-N {
+    background-color: #a0b4ff;
+    color: #0040bf;
+}
+
+.type-TN {
+    background-color: #ffd6a0;
+    color: #bf4c00;
+}
+
+.type-D {
+    background-color: #d6a0ff;
+    color: #5c00bf;
+}
+
+/* Chart Options */
+.chart-options {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+.option-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.option-group label {
+    font-weight: 600;
+}
+
+.option-group select, .option-group button {
+    padding: 0.8rem;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+    background-color: var(--primary-bg);
+    font-size: 1rem;
+}
+
+.option-group select:focus {
+    outline: 2px solid var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+#generate-chart {
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    padding: 1rem;
+}
+
+#generate-chart:hover {
+    background-color: var(--accent-light);
+    transform: translateY(-2px);
+}
+
+/* Chart Section */
+.chart-container {
+    background-color: var(--primary-bg);
+    border-radius: 8px;
+    padding: 1.5rem;
+    width: 100%;
+    height: 500px;
+    position: relative;
+    box-shadow: 0 4px 8px var(--shadow-color);
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    margin-top: 2rem;
+    color: var(--text-color);
+    opacity: 0.7;
+}
+
+/* Utility Classes */
+.hidden {
+    display: none;
+}
+
+/* Animation */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.fadeIn {
+    animation: fadeIn 0.5s ease forwards;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading::after {
+    content: "";
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid var(--accent-color);
+    border-radius: 50%;
+    border-top-color: transparent;
+    animation: spin 1s linear infinite;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .data-wrapper {
+        grid-template-columns: 1fr;
+    }
+    
+    .columns-info {
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        padding-right: 0;
+        padding-bottom: 1rem;
+    }
+    
+    .chart-container {
+        height: 350px;
+    }
+}
