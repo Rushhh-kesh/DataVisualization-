@@ -1,7 +1,15 @@
+console.log('Chart.js loaded:', typeof Chart !== 'undefined');
+
 // Global variables to store data
 let uploadedData = null;
 let columnTypes = {};
 let chart = null;
+
+// Material Design colors for charts
+const matColors = [
+    '#003f5c', '#2f4b7c', '#665191', '#a05195', 
+    '#d45087', '#f95d6a', '#ff7c43', '#ffa600'
+];
 
 // DOM Elements
 const fileUpload = document.getElementById('file-upload');
@@ -219,62 +227,21 @@ function generateChart() {
 
 // Prepare data for pie chart
 function preparePieChartData(labelColumn, valueColumn) {
-    // Group by label and sum values
     const groupedData = _.groupBy(uploadedData, labelColumn);
-    
     const labels = Object.keys(groupedData);
-    const values = labels.map(label => {
-        return _.sumBy(groupedData[label], item => parseFloat(item[valueColumn]) || 0);
-    });
-    
-    // Generate random colors
-    const colors = generateRandomColors(labels.length);
-    
-    const chartData = {
+    const values = labels.map(label => 
+        _.sumBy(groupedData[label], item => parseFloat(item[valueColumn]) || 0)
+    );
+
+    return [{
         labels: labels,
         datasets: [{
             data: values,
-            backgroundColor: colors,
-            borderColor: colors.map(color => adjustColorBrightness(color, -0.2)),
+            backgroundColor: matColors.slice(0, labels.length),
+            borderColor: matColors.slice(0, labels.length).map(c => adjustColorBrightness(c, -0.2)),
             borderWidth: 1
         }]
-    };
-    
-    const chartOptions = {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: {
-                position: 'right'
-            },
-            title: {
-                display: true,
-                text: `${labelColumn} by ${valueColumn}`,
-                font: {
-                    size: 18
-                }
-            },
-            tooltip: {
-                callbacks: {
-                    label: function(context) {
-                        const label = context.label || '';
-                        const value = context.raw || 0;
-                        const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                        const percentage = Math.round((value / total) * 100);
-                        return `${label}: ${value} (${percentage}%)`;
-                    }
-                }
-            }
-        },
-        animation: {
-            animateRotate: true,
-            animateScale: true,
-            duration: 2000,
-            easing: 'easeOutQuart'
-        }
-    };
-    
-    return [chartData, chartOptions];
+    }, defaultChartOptions(labelColumn, valueColumn)];
 }
 
 // Prepare data for bar and line charts
@@ -287,8 +254,8 @@ function prepareAxisBasedChartData(chartType, xColumn, yColumn) {
         return _.meanBy(groupedData[label], item => parseFloat(item[yColumn]) || 0);
     });
     
-    // Generate color
-    const color = generateRandomColors(1)[0];
+    // Generate color based on mat colors
+    const color = matColors[Math.floor(Math.random() * matColors.length)];
     const borderColor = adjustColorBrightness(color, -0.2);
     
     const chartData = {
@@ -296,7 +263,7 @@ function prepareAxisBasedChartData(chartType, xColumn, yColumn) {
         datasets: [{
             label: yColumn,
             data: values,
-            backgroundColor: color,
+            backgroundColor: chartType === 'line' ? adjustColorBrightness(color, 0.6) : color,
             borderColor: borderColor,
             borderWidth: 1,
             tension: 0.4,
@@ -359,80 +326,23 @@ function createChart(type, data, options) {
         chart.destroy();
     }
     
-    // Apply 3D effect
-    if (type === 'bar') {
-        // Add 3D effect for bar charts
-        Chart.defaults.elements.bar.borderSkipped = false;
-        options.plugins.tooltip.callbacks.beforeLabel = function(context) {
-            return '3D View';
-        };
-        options.borderRadius = 5;
-        
-        // Increase border width for 3D effect
-        data.datasets.forEach(dataset => {
-            dataset.borderWidth = 3;
-            // Add shadow for 3D effect
-            dataset.shadowOffsetX = 3;
-            dataset.shadowOffsetY = 3;
-            dataset.shadowBlur = 10;
-            dataset.shadowColor = 'rgba(0,0,0,0.5)';
-        });
-    } else if (type === 'pie') {
-        // Add 3D effect for pie charts
-        options.cutout = '30%'; // Donut style for 3D effect
-        options.plugins.tooltip.callbacks.beforeLabel = function(context) {
-            return '3D View';
-        };
-    }
-    
     // Create new chart
     chart = new Chart(chartCanvas, {
         type: type,
         data: data,
-        options: options,
-        plugins: [{
-            beforeDraw: function(chart) {
-                if (type === 'pie') {
-                    // Add shadow for 3D effect
-                    const ctx = chart.ctx;
-                    ctx.shadowColor = 'rgba(0,0,0,0.5)';
-                    ctx.shadowBlur = 10;
-                    ctx.shadowOffsetX = 5;
-                    ctx.shadowOffsetY = 5;
-                } else if (type === 'bar') {
-                    // Add gradient for 3D effect
-                    const ctx = chart.ctx;
-                    const gradient = ctx.createLinearGradient(0, 0, 0, chart.height);
-                    gradient.addColorStop(0, 'rgba(255,255,255,0.3)');
-                    gradient.addColorStop(1, 'rgba(0,0,0,0.1)');
-                    
-                    chart.data.datasets.forEach(dataset => {
-                        dataset.backgroundColor = dataset.backgroundColor.map(color => {
-                            return ctx.createLinearGradient(0, 0, 0, chart.height);
-                        });
-                        
-                        dataset.backgroundColor.forEach(gradient => {
-                            gradient.addColorStop(0, adjustColorBrightness(data.datasets[0].backgroundColor, 0.3));
-                            gradient.addColorStop(1, adjustColorBrightness(data.datasets[0].backgroundColor, -0.2));
-                        });
-                    });
-                }
-            }
-        }]
+        options: options
     });
+    
+    console.log("Chart created:", chart);
 }
 
-// Helper function to generate random colors
+// Helper function to generate random colors from matColors
 function generateRandomColors(count) {
     const colors = [];
-    const baseHues = [0, 60, 120, 180, 240, 300]; // Red, Yellow, Green, Cyan, Blue, Magenta
     
     for (let i = 0; i < count; i++) {
-        const hue = baseHues[i % baseHues.length] + (Math.random() * 30 - 15);
-        const saturation = 70 + Math.random() * 20; // 70-90%
-        const lightness = 50 + Math.random() * 10; // 50-60%
-        
-        colors.push(`hsl(${hue}, ${saturation}%, ${lightness}%)`);
+        const colorIndex = i % matColors.length;
+        colors.push(matColors[colorIndex]);
     }
     
     return colors;
@@ -498,3 +408,23 @@ window.addEventListener('load', function() {
     document.querySelector('header').classList.add('fadeIn');
     document.getElementById('upload-section').classList.add('fadeIn');
 });
+
+function defaultChartOptions(xLabel, yLabel) {
+    return {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: { position: 'top' },
+            title: {
+                display: true,
+                text: `${yLabel} by ${xLabel}`,
+                font: { size: 18 }
+            }
+        },
+        scales: {
+            y: { beginAtZero: true, title: { display: true, text: yLabel } },
+            x: { title: { display: true, text: xLabel } }
+        },
+        animation: { duration: 2000, easing: 'easeOutQuart' }
+    };
+}

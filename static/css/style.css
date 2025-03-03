@@ -2,11 +2,21 @@
 :root {
     --primary-bg: #fffbf5;
     --secondary-bg: #fff8ee;
-    --accent-color: #ff9933;
-    --accent-light: #ffbb66;
+    --accent-color: #ff7c43;
+    --accent-light: #ffa600;
     --text-color: #333333;
     --border-color: #e6e0d4;
     --shadow-color: rgba(0, 0, 0, 0.05);
+    
+    /* Material Design Colors for Charts */
+    --mat-color-1: #003f5c;
+    --mat-color-2: #2f4b7c;
+    --mat-color-3: #665191;
+    --mat-color-4: #a05195;
+    --mat-color-5: #d45087;
+    --mat-color-6: #f95d6a;
+    --mat-color-7: #ff7c43;
+    --mat-color-8: #ffa600;
 }
 
 * {
@@ -172,23 +182,23 @@ h2 {
 }
 
 .type-T {
-    background-color: #9eebcf;
-    color: #00593e;
+    background-color: var(--mat-color-2);
+    color: white;
 }
 
 .type-N {
-    background-color: #a0b4ff;
-    color: #0040bf;
+    background-color: var(--mat-color-5);
+    color: white;
 }
 
 .type-TN {
-    background-color: #ffd6a0;
-    color: #bf4c00;
+    background-color: var(--mat-color-7);
+    color: white;
 }
 
 .type-D {
-    background-color: #d6a0ff;
-    color: #5c00bf;
+    background-color: var(--mat-color-3);
+    color: white;
 }
 
 /* Chart Options */

@@ -27,7 +27,11 @@ def identify_column_types(df):
     return column_types
 
 def is_date_column(column):
-    # Common date formats to try
+    # First test if the column is already a datetime type
+    if pd.api.types.is_datetime64_any_dtype(column):
+        return True
+        
+    # Try common formats with explicit format specification
     date_formats = [
         '%Y-%m-%d',          # 2023-01-31
         '%d/%m/%Y',          # 31/01/2023
@@ -40,7 +44,7 @@ def is_date_column(column):
         '%Y-%m-%d %H:%M:%S'  # 2023-01-31 14:30:00
     ]
     
-    # Try common formats first
+    # Try each format explicitly
     for date_format in date_formats:
         try:
             pd.to_datetime(column, format=date_format, errors='raise')
@@ -48,9 +52,12 @@ def is_date_column(column):
         except ValueError:
             continue
     
-    # As a fallback, try with dateutil parser
+    # If all explicit formats fail, try a more permissive approach
+    # but only on a small sample to reduce processing time
+    sample_size = min(10, len(column))
     try:
-        pd.to_datetime(column, errors='raise')
+        # Use without the deprecated parameter
+        pd.to_datetime(column.sample(sample_size), errors='raise')
         return True
     except:
         return False
