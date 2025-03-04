@@ -116,4 +116,4 @@ def upload_file():
     return jsonify({'error': 'File type not supported. Please upload .xlsx or .csv files.'})
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host = '0.0.0.0' , port = 5000, debug= True)
